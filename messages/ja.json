@@ -1,0 +1,20 @@
+{
+  "NavbarLinks": {
+    "home": "ホーム",
+    "homeTitle": "ホームページ",
+    "about": "概要",
+    "aboutTitle": "概要ページ",
+    "profile": "プロフィール",
+    "profileTitle": "プロフィールページ"
+  },
+  "HomePage": {
+    "title": "ランディングページ"
+  },
+  "AboutPage": {
+    "title": "About",
+    "desc": "これは説明ページです"
+  },
+  "ProfilePage": {
+    "title": "プロフィール"
+  }
+}
