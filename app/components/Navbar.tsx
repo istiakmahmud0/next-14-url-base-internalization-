@@ -1,113 +1,60 @@
-// "use client";
-
-// import { useTranslations } from "next-intl";
-// import Link from "next/link";
-// import { usePathname, useRouter } from "next/navigation";
-// import React, { ChangeEvent } from "react";
-
-// const Navbar = ({ locale }: { locale: string }) => {
-//   const t = useTranslations("NavbarLinks");
-//   const pathname = usePathname();
-//   const router = useRouter();
-
-//   const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
-//     const newLocale = e.target.value;
-
-//     // Modify the pathname to include the new locale
-//     const segments = pathname.split("/");
-//     segments[1] = newLocale; // Replace the locale segment
-//     const newPath = segments.join("/");
-
-//     router.push(newPath);
-//   };
-
-//   // Generate dynamic links with the correct locale prefix
-//   const links = [
-//     { key: "home", path: "" },
-//     { key: "about", path: "about" },
-//     { key: "profile", path: "about/profile" },
-//   ];
-
-//   return (
-//     <div className="w-full flex justify-between border-b py-4">
-//       <div className="flex gap-4 items-center text-lg">
-//         {links.map(({ key, path }) => (
-//           <Link key={key} href={`/${locale}/${path}`}>
-//             {t(key)}
-//           </Link>
-//         ))}
-//       </div>
-//       <select
-//         value={locale}
-//         onChange={handleLanguageChange}
-//         className="rounded-md px-4 py-2 bg-transparent hover:outline-none focus:outline-none"
-//       >
-//         <option value="en">EN</option>
-//         <option value="ja">JA</option>
-//       </select>
-//     </div>
-//   );
-// };
-
-// export default Navbar;
-
 "use client";
 
-import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const Navbar = ({ locale }: { locale: string }) => {
+  const [currentLocale, setCurrentLocale] = useState(locale); // Track the current locale state
+  console.log("about", locale);
   const t = useTranslations("NavbarLinks");
-  const pathname = usePathname();
-  const router = useRouter();
 
-  const domainMap = {
-    en: "arisaftech.com",
-    ja: "arisaftech.co.jp",
-  };
+  useEffect(() => {
+    // This ensures that when the page loads, it correctly displays the current locale in the dropdown.
+    setCurrentLocale(locale);
+  }, [locale]);
 
   const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newLocale = e.target.value;
-    const currentPath = pathname;
+
+    const domainMap = {
+      en: "arisaftech-local.com",
+      ja: "arisaftech-local.co.jp",
+    };
 
     // Get the new domain based on the selected locale
     const newDomain = domainMap[newLocale as keyof typeof domainMap];
 
-    // Construct the new URL with the appropriate domain
+    // Get the current path and query string from the current URL
+    const currentPath = window.location.pathname;
+    const currentQuery = window.location.search; // This includes the query string, if any
+
+    // Construct the new URL with the new domain, locale, path, and query string
     const protocol = window.location.protocol;
     const port = window.location.port ? `:${window.location.port}` : "";
-    const newUrl = `${protocol}//${newDomain}${port}${currentPath}`;
+    const newUrl = `${protocol}//${newDomain}${port}/${newLocale}${currentPath}${currentQuery}`;
 
-    // Navigate to the new URL
+    // Redirect to the new URL
     window.location.href = newUrl;
   };
-
-  // Generate links without locale prefix since we're using domains
-  const links = [
-    { key: "home", path: "/" },
-    { key: "about", path: "/about" },
-    { key: "profile", path: "/about/profile" },
-  ];
 
   return (
     <div className="w-full flex justify-between border-b py-4">
       <div className="flex gap-4 items-center text-lg">
-        {links.map(({ key, path }) => (
-          <Link key={key} href={path}>
-            {t(key)}
-          </Link>
-        ))}
+        <Link href={`/${locale}/`}>{t("home")}</Link>
+        <Link href={`/${locale}/about`}>{t("about")}</Link>
+        <Link href={`/${locale}/about/profile`}>{t("profile")}</Link>
       </div>
-      <select
-        value={locale}
-        onChange={handleLanguageChange}
-        className="rounded-md px-4 py-2 bg-transparent hover:outline-none focus:outline-none"
-      >
-        <option value="en">EN</option>
-        <option value="ja">JA</option>
-      </select>
+      <div className="flex gap-4 items-center text-lg">
+        <select
+          value={currentLocale}
+          onChange={handleLanguageChange}
+          className="rounded-md px-4 py-2 bg-transparent hover:outline-none focus:outline-none"
+        >
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
     </div>
   );
 };

@@ -1,13 +1,3 @@
-// import createMiddleware from "next-intl/middleware";
-
-// export default createMiddleware({
-//   locales: ["en", "ja"],
-//   defaultLocale: "en",
-// });
-
-// export const config = {
-//   matcher: ["/", "/(ja|en)/:path*"],
-// };
 import createMiddleware from "next-intl/middleware";
 
 export default createMiddleware({
@@ -16,12 +6,12 @@ export default createMiddleware({
   localePrefix: "never",
   domains: [
     {
-      domain: "arisaftech.com",
+      domain: "arisaftech-local.com",
       defaultLocale: "en",
       locales: ["en"],
     },
     {
-      domain: "arisaftech.co.jp",
+      domain: "arisaftech-local.co.jp",
       defaultLocale: "ja",
       locales: ["ja"],
     },
