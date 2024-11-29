@@ -8,7 +8,6 @@ export default getRequestConfig(async ({ locale }: { locale: string }) => {
     notFound();
   }
 
-  // Update the import path to match your `messages` folder
   const messages = (await import(`./messages/${locale}.json`)).default;
 
   return {
